@@ -3,9 +3,9 @@ use {
     reqwest::Error as ReqwestError,
     serde::Deserialize,
     serde_json::Error as SerdeJsonError,
+    solana_sdk::pubkey::ParsePubkeyError,
     std::{array::TryFromSliceError, env::VarError, error::Error, fmt},
 };
-//use thiserror::Error;
 
 /// A specialized `Result` type for `Turnkey` operations.
 ///
@@ -43,18 +43,27 @@ pub enum TurnkeyError {
     ///
     /// The contained `String` provides a human-readable description of the error,
     /// which can be useful for logging, debugging, or displaying an error message
+    /// Represents a generic error not covered by more specific `TurnkeyError` variants.
+    ///
+    /// This variant is used for errors that do not fit into the predefined categories
+    /// of `MethodError` or `HttpError`, such as errors from external dependencies,
+    /// internal logic errors, or any other situations where a more specific error
+    /// cannot be provided.
+    ///
+    /// The contained `String` provides a human-readable description of the error,
+    /// which can be useful for logging, debugging, or displaying an error message
     OtherError(String),
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct TurnkeyResponseError {
+pub(crate) struct TurnkeyResponseError {
     pub code: u32,
     pub message: String,
     pub details: Vec<ErrorDetail>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct ErrorDetail {
+pub(crate) struct ErrorDetail {
     #[serde(rename = "@type")]
     pub type_field: String,
     #[serde(rename = "fieldViolations")]
@@ -62,7 +71,7 @@ pub struct ErrorDetail {
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct FieldViolation {
+pub(crate) struct FieldViolation {
     pub field: String,
     pub description: String,
 }
