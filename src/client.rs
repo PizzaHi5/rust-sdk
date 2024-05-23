@@ -2,6 +2,7 @@ use base64::prelude::BASE64_URL_SAFE_NO_PAD;
 use base64::Engine;
 use constants::BASE_URL;
 use dotenv::dotenv;
+use model::queries::Queryable;
 use p256::ecdsa::signature::Signer;
 use p256::ecdsa::{Signature, SigningKey};
 use p256::FieldBytes;
@@ -15,10 +16,12 @@ use url::Url;
 
 use crate::errors::*;
 use crate::models::*;
+use crate::model::*;
 
 mod constants;
 mod errors;
 mod models;
+pub mod model;
 
 //move or remove this
 #[derive(Error, Debug, PartialEq)]
@@ -97,7 +100,15 @@ impl TurnkeyClient {
     }
 
     //define a new trait for all requests : Wrap it to one type, subtype of serialize
-    pub async fn request<T: Serialize>(&self, value: &T) -> TurnkeyResult<()> {
+    pub async fn query_request<T: Serialize + Queryable>(&self, value: &T, function: &str) -> TurnkeyResult<()> {
+        //check valid str input
+
+        //
+        
+        Ok(())
+    }
+
+    pub async fn submit_request<T: Serialize>(&self, value: &T) -> TurnkeyResult<()> {
         Ok(())
     }
 
