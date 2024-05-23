@@ -1,51 +1,23 @@
-use base64::prelude::BASE64_URL_SAFE_NO_PAD;
-use base64::Engine;
-use p256::ecdsa::{Signature, SigningKey};
-use p256::ecdsa::signature::Signer;
-use p256::FieldBytes;
-use serde::Serialize;
-use thiserror::Error;
+use turnkey::{errors::TurnkeyResult, KeySelector, Turnkey};
+use turnkey::client::Turnkey;
+use dotenv::dotenv;
+//use mockito::Server;
 
-#[derive(Error, Debug, PartialEq)]
-pub enum StampError {
-    #[error("cannot decode private key: invalid hex")]
-    InvalidPrivateKeyString(#[from] hex::FromHexError),
-    #[error("cannot load private key: invalid bytes")]
-    InvalidPrivateKeyBytes,
-}
-
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-struct ApiStamp {
-    public_key: String,
-    signature: String,
-    scheme: String,
-}
-pub struct TurnkeyApiKey {
-    pub private_key_hex: String,
-    pub public_key_hex: String,
-}
-
-pub fn stamp(request_body: String, api_key: &TurnkeyApiKey) -> Result<String, StampError> {
-    let private_key_bytes = hex::decode(&api_key.private_key_hex)?;
-    let signing_key: SigningKey = SigningKey::from_bytes(FieldBytes::from_slice(&private_key_bytes)).map_err(|_| StampError::InvalidPrivateKeyBytes)?;
-    let sig: Signature = signing_key.sign(request_body.as_bytes());
-
-    let stamp = ApiStamp {
-        public_key: api_key.public_key_hex.clone(),
-        signature: hex::encode(sig.to_der()),
-        scheme: "SIGNATURE_SCHEME_TK_API_P256".to_string(),
-    };
-
-    let json_stamp = serde_json::to_string(&stamp).unwrap();
-
-    Ok(BASE64_URL_SAFE_NO_PAD.encode(json_stamp.as_bytes()))
-}
-
+// Testing
 #[cfg(test)]
-mod tests {
+mod test {
     use super::*;
     use serde_json::Value;
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+    async fn test_example_wallet() -> TurnkeyResult<()> {
+        dotenv().ok();
+        let mut server = mockito::Server::new();
+
+        let turnkey_client = Turnkey::new();
+
+        Ok(())
+    }
 
     #[test]
     fn test_stamps() {
@@ -87,4 +59,5 @@ mod tests {
         assert_eq!(format!("{:?}", err), "InvalidPrivateKeyBytes".to_string());
         assert_eq!(err.to_string(), "cannot load private key: invalid bytes".to_string());
     }
+
 }
