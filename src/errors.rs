@@ -5,9 +5,7 @@ use {
     serde_json::Error as SerdeJsonError,
     std::{array::TryFromSliceError, env::VarError, error::Error, fmt},
 };
-
-use thiserror::Error;
-
+//use thiserror::Error;
 
 /// A specialized `Result` type for `Turnkey` operations.
 ///
@@ -26,7 +24,7 @@ pub enum TurnkeyError {
     ///
     /// This variant is used when the `Turnkey` API returns an error
     /// response.
-    #[allow(private_interfaces)]
+    //#[allow(private_interfaces)]
     MethodError(TurnkeyResponseError),
 
     /// Represents an HTTP request error.

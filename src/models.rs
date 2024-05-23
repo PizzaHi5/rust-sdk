@@ -10,6 +10,14 @@ pub struct GetWalletV1 {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
+pub struct BodyAndStamp {
+    #[serde(rename = "type")]
+    pub request_body: String,
+    pub x_stamp: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct SignRawPayloadRequest {
     #[serde(rename = "type")]
     pub activity_type: String,
