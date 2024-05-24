@@ -2,7 +2,8 @@ use lazy_static::lazy_static;
 use std::collections::HashMap;
 
 pub const BASE_URL: &str = "https://api.turnkey.com/";
-
+pub const QUERY_URL: &str = "public/v1/query/";
+pub const SUBMIT_URL: &str = "public/v1/submit/";
 // How to use: Pass in key ref string to request
 // Mapping cannot be changed after initialization
 lazy_static! {

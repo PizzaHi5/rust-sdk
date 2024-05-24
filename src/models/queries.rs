@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 
 // Queries only covers wallet and private keys currently
-//pub type Query//
 
 // Constrain query inputs to fit this trait
 pub trait Queryable {}

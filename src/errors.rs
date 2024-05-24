@@ -3,6 +3,7 @@ use {
     reqwest::Error as ReqwestError,
     serde::Deserialize,
     serde_json::Error as SerdeJsonError,
+    url::ParseError,
     std::{array::TryFromSliceError, env::VarError, error::Error, fmt},
 };
 
@@ -99,11 +100,11 @@ impl From<SerdeJsonError> for TurnkeyError {
     }
 }
 
-// impl From<ParsePubkeyError> for TurnkeyError {
-//     fn from(error: ParsePubkeyError) -> Self {
-//         TurnkeyError::OtherError(format!("Serde JSON error: {}", error))
-//     }
-// }
+impl From<ParseError> for TurnkeyError {
+    fn from(error: ParseError) -> Self {
+        TurnkeyError::OtherError(format!("Url error: {}", error))
+    }
+}
 
 impl From<TryFromSliceError> for TurnkeyError {
     fn from(error: TryFromSliceError) -> Self {
