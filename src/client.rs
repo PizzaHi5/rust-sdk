@@ -32,6 +32,7 @@ pub enum StampError {
     InvalidPrivateKeyBytes,
 }
 
+/// Holds api key information
 pub struct TurnkeyApiKey {
     pub private_key_hex: String,
     pub public_key_hex: String,
@@ -41,21 +42,7 @@ pub struct TurnkeyApiKey {
 pub struct TurnkeyClient {
     api_keys: TurnkeyApiKey,
     organization_id: String,
-    example_key_info: KeyInfo,
     client: Client,
-}
-
-/// Holds the private key ID and corresponding public key for a specific operation.
-#[derive(Clone)]
-pub struct KeyInfo {
-    private_key_id: String,
-    public_key: Pubkey,
-}
-
-/// Enumerates the selectable keys for operations, distinguishing by their use case.
-pub enum KeySelector {
-    ExampleKey,
-    // other key info variants depending on what other keys you need to sign with
 }
 
 impl TurnkeyClient {
@@ -94,9 +81,6 @@ impl TurnkeyClient {
             .body(body)
             .send()
             .await;
-
-        let response_body = self.process_response::<ActivityResponse>(response).await?;
-
         //handle response
         let response_body = self.process_response::<ActivityResponse>(response).await?;
         //format response data and return 

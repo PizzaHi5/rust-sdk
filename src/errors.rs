@@ -3,7 +3,6 @@ use {
     reqwest::Error as ReqwestError,
     serde::Deserialize,
     serde_json::Error as SerdeJsonError,
-    solana_sdk::pubkey::ParsePubkeyError,
     std::{array::TryFromSliceError, env::VarError, error::Error, fmt},
 };
 
@@ -56,14 +55,14 @@ pub enum TurnkeyError {
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub(crate) struct TurnkeyResponseError {
+pub struct TurnkeyResponseError {
     pub code: u32,
     pub message: String,
     pub details: Vec<ErrorDetail>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub(crate) struct ErrorDetail {
+pub struct ErrorDetail {
     #[serde(rename = "@type")]
     pub type_field: String,
     #[serde(rename = "fieldViolations")]
@@ -71,7 +70,7 @@ pub(crate) struct ErrorDetail {
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub(crate) struct FieldViolation {
+pub struct FieldViolation {
     pub field: String,
     pub description: String,
 }
