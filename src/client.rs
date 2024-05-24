@@ -21,7 +21,7 @@ use crate::model::*;
 mod constants;
 mod errors;
 mod models;
-pub mod model;
+mod model;
 
 //move or remove this
 #[derive(Error, Debug, PartialEq)]
